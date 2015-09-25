@@ -30,4 +30,11 @@ class LogFileTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(LogEntry::class, $entries[0]);
         $this->assertEquals(2, count($entries));
     }
+
+    public function testSort()
+    {
+        $entries = $this->logFile->getEntries("dateTime", "DESC");
+        $this->assertNotFalse(stripos($entries[0]->getLine(), "LastnameX"));
+
+    }
 }

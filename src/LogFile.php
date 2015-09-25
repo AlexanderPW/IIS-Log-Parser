@@ -70,7 +70,6 @@ class LogFile
         foreach ($lines as $key => $line) {
             //remove commented lines with entry names
             if (substr($line, 0, 1) == "#") {
-                unset($lines[$key]);
                 continue;
             }
 
@@ -81,8 +80,36 @@ class LogFile
     /*
      * @return LogEntry[]
      */
-    public function getEntries()
+    public function getEntries($sortProperty = false, $sortOrder = "ASC")
     {
+        $reflection = new \ReflectionClass(LogEntry::class);
+
+        if ($sortProperty && $reflection->hasProperty($sortProperty)) {
+
+            $methodName = "get" . ucwords($sortProperty);
+
+            $entries = $this->entries;
+            usort($entries, function ($a, $b) use ($methodName, $sortOrder) {
+
+                $a = $a->{$methodName}();
+                $b = $b->{$methodName}();
+
+                if ($a == $b) {
+                    return 0;
+                }
+
+                if ($sortOrder == "ASC") {
+                    return ($a < $b) ? -1 : 1;
+                }
+
+                return ($a > $b) ? -1 : 1;
+
+            });
+
+            return $entries;
+
+        }
+
         return $this->entries;
     }
 }
