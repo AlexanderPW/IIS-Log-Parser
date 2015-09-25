@@ -39,11 +39,11 @@ is the default IIS logging set-up. It may be possible to have additional fields.
 * `string` Request URI stem - accessed by `getRequestUri()`
 * `Array` Request query - query string key/value pairs stored in array, accessed by `getRequestQuery()`
 * `string` Client IP - accessed by `getClientIp()`
-* `string` Client username (as recognized by IIS with Windows Authenticatino enabled) - accessed by `getClientUsername()`
+* `string` Client username (as recognized by IIS with Windows Authentication enabled) - accessed by `getClientUsername()`
 * `string` Client user agent - accessed by `getClientUserAgent()`
 * `int` Response status code - accessed by `getResponseStatusCode()`
 * `int` Response status sub-code - accessed by `getResponseStatusSubCode()`
-* `int` Response WIN32 status code - accessed by `getResponseStatusWin32Code()` - see (list of error codes)[https://msdn.microsoft.com/en-us/library/ms681381.aspx]
+* `int` Response WIN32 status code - accessed by `getResponseStatusWin32Code()` - see [list of error codes](https://msdn.microsoft.com/en-us/library/ms681381.aspx)
 * `int` Time taken (in seconds) - accessed by `getTimeTaken()` 
 
 
