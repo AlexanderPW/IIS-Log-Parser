@@ -47,4 +47,4 @@ is the default IIS logging set-up. It may be possible to have additional fields.
 * `int` Response status code - accessed by `getResponseStatusCode()`
 * `int` Response status sub-code - accessed by `getResponseStatusSubCode()`
 * `int` Response WIN32 status code - accessed by `getResponseStatusWin32Code()` - see [list of error codes](https://msdn.microsoft.com/en-us/library/ms681381.aspx)
-* `int` Time taken (in seconds) - accessed by `getTimeTaken()` 
+* `int` Time taken (in milliseconds) - accessed by `getTimeTaken()` 
