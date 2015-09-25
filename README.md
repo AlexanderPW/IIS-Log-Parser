@@ -1,5 +1,7 @@
 # IIS Log Parser #
 
+[![Code Climate](https://codeclimate.com/github/garethellis36/IIS-Log-Parser/badges/gpa.svg)](https://codeclimate.com/github/garethellis36/IIS-Log-Parser)
+
 PHP class for parsing IIS log entries
 
 # Installation #
@@ -46,5 +48,3 @@ is the default IIS logging set-up. It may be possible to have additional fields.
 * `int` Response status sub-code - accessed by `getResponseStatusSubCode()`
 * `int` Response WIN32 status code - accessed by `getResponseStatusWin32Code()` - see [list of error codes](https://msdn.microsoft.com/en-us/library/ms681381.aspx)
 * `int` Time taken (in seconds) - accessed by `getTimeTaken()` 
-
-
