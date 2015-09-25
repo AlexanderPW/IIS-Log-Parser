@@ -325,6 +325,9 @@ class LogEntry
      */
     public function setClientUserAgent($clientUserAgent)
     {
+        if ($clientUserAgent == "-") {
+            $clientUserAgent = "Not set";
+        }
         $this->clientUserAgent = $clientUserAgent;
     }
 
