@@ -24,6 +24,7 @@ $logFile = new LogFile($pathToFile);
 //you will now have an array of LogEntry objects available via LogFile's getEntries() method
 foreach ($logFile->getEntries() as $entry) {
     echo $entry->getRequestMethod();
+    //GET
 }
 ```
 
