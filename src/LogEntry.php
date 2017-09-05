@@ -13,67 +13,67 @@ class LogEntry
      * @var string Contains raw data for log entry
      */
     protected $line;
-    
+
     /*
      * @var \DateTimeImmutable Date and time of entry
      */
     protected $dateTime;
-    
+
     /*
      * @var string Server IP address
      */
     protected $serverIp;
-    
+
     /*
      * @var string Server port
      */
     protected $serverPort;
-    
+
     /*
      * @var string Request method (e.g. GET, POST, etc)
-     */    
+     */
     protected $requestMethod;
-    
+
     /*
      * @var string Request URI stem not including hostname e.g. "/index.html"
      */
     protected $requestUri;
-    
+
     /*
      * @var array Request query string
-     */    
+     */
     protected $requestQuery;
 
     /*
      * @var string Client IP address
      */
     protected $clientIp;
-    
+
     /*
      * @var string Client username
      */
     protected $clientUsername;
-    
+
     /*
      * @var string Client user agent
      */
     protected $clientUserAgent;
-    
+
     /*
      * @var int Response status code
      */
     protected $responseStatusCode;
-    
+
     /*
      * @var int Response sub-status code
      */
     protected $responseSubStatusCode;
-    
+
     /*
      * @var int Response windows status code
      */
     protected $responseWin32StatusCode;
-    
+
     /*
      * @var int Time taken in seconds
      */
@@ -83,6 +83,8 @@ class LogEntry
      * @const int Expected number of fields to be found in an IIS log entry
      */
     const EXPECTED_NUMBER_OF_FIELDS = 14;
+
+    const FIELDS_FALLBACK = 15;
 
     /**
      * LogEntry constructor.
@@ -105,24 +107,42 @@ class LogEntry
 
         array_filter($fields);
 
-        if (count($fields) != self::EXPECTED_NUMBER_OF_FIELDS) {
+        $colCount = count($fields);
+
+        if ($colCount == self::EXPECTED_NUMBER_OF_FIELDS) {
+            $this->setDateTime($fields[0] . " " . $fields[1]);
+            $this->setServerIp($fields[2]);
+            $this->setRequestMethod($fields[3]);
+            $this->setRequestUri($fields[4]);
+            $this->setRequestQuery($fields[5]);
+            $this->setServerPort($fields[6]);
+            $this->setClientUsername($fields[7]);
+            $this->setClientIp($fields[8]);
+            $this->setClientUserAgent($fields[9]);
+            $this->setResponseStatusCode($fields[10]);
+            $this->setResponseSubStatusCode($fields[11]);
+            $this->setResponseWin32StatusCode($fields[12]);
+            $this->setTimeTaken($fields[13]);
+        }
+        elseif ($colCount == self::FIELDS_FALLBACK) {
+            $this->setDateTime($fields[0] . " " . $fields[1]);
+            $this->setServerIp($fields[2]);
+            $this->setRequestMethod($fields[3]);
+            $this->setRequestUri($fields[4]);
+            $this->setRequestQuery($fields[5]);
+            $this->setServerPort($fields[6]);
+            $this->setClientUsername($fields[7]);
+            $this->setClientIp($fields[8]);
+            $this->setClientUserAgent($fields[9]);
+            // field 10 not used
+            $this->setResponseStatusCode($fields[11]);
+            $this->setResponseSubStatusCode($fields[12]);
+            $this->setResponseWin32StatusCode($fields[13]);
+            $this->setTimeTaken($fields[14]);
+        } else {
             $msg = "Expected " . self::EXPECTED_NUMBER_OF_FIELDS . " fields, found " . count($fields);
             throw new InvalidEntryException($msg);
         }
-
-        $this->setDateTime($fields[0] . " " . $fields[1]);
-        $this->setServerIp($fields[2]);
-        $this->setRequestMethod($fields[3]);
-        $this->setRequestUri($fields[4]);
-        $this->setRequestQuery($fields[5]);
-        $this->setServerPort($fields[6]);
-        $this->setClientUsername($fields[7]);
-        $this->setClientIp($fields[8]);
-        $this->setClientUserAgent($fields[9]);
-        $this->setResponseStatusCode($fields[10]);
-        $this->setResponseSubStatusCode($fields[11]);
-        $this->setResponseWin32StatusCode($fields[12]);
-        $this->setTimeTaken($fields[13]);
     }
 
     /**
@@ -250,7 +270,7 @@ class LogEntry
      */
     public function setDateTime($dateTime)
     {
-        $this->dateTime = new \DateTimeImmutable($dateTime);
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -290,15 +310,7 @@ class LogEntry
      */
     public function setRequestQuery($requestQuery)
     {
-        if ($requestQuery == "-") {
-            $requestQuery = null;
-            return $this->requestQuery = [];
-        }
-        $queries = explode("&", $requestQuery);
-        foreach ($queries as $query) {
-            list($key, $value) = explode("=", $query);
-            $this->requestQuery[$key] = $value;
-        }
+        $this->requestQuery = $requestQuery;
     }
 
     /**
@@ -314,9 +326,6 @@ class LogEntry
      */
     public function setClientUsername($clientUsername)
     {
-        if ($clientUsername == "-") {
-            $clientUsername = null;
-        }
         $this->clientUsername = $clientUsername;
     }
 
@@ -325,9 +334,6 @@ class LogEntry
      */
     public function setClientUserAgent($clientUserAgent)
     {
-        if ($clientUserAgent == "-") {
-            $clientUserAgent = "Not set";
-        }
         $this->clientUserAgent = $clientUserAgent;
     }
 
@@ -362,5 +368,5 @@ class LogEntry
     {
         $this->timeTaken = $timeTaken;
     }
-    
+
 }
